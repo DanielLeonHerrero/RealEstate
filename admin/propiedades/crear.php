@@ -103,7 +103,7 @@ incluirTemplate("header");
 ?>
 
 <main class="contenedor seccion">
-    <h1>crear</h1>
+    <h1>Crear nueva propiedad</h1>
 
     <?php 
     foreach($errores as $error){ ?>
