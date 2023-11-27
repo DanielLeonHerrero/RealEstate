@@ -1,5 +1,14 @@
 <?php
+require_once '../includes/config/database.php';
+$db = conectarDB();
+
+$querry = "SELECT * FROM propiedades";
+
+$resultado = mysqli_query($db, $querry);
+
+//Recuperar datos de tipo GET
 $mensaje = $_GET['resultado'] ?? null;
+//Requires
 require_once '../includes/funciones.php';
 incluirTemplate("header");
 ?>
@@ -26,7 +35,20 @@ incluirTemplate("header");
             </tr>
         </thead>
         <tbody>
+            <?php while($propiedad = mysqli_fetch_assoc($resultado)): ?> 
             <tr>
+                <td><?php echo $propiedad['id']; ?></td>
+                <td><?php echo $propiedad['titulo']; ?></td>
+                <td><img src="/imagenes/<?php echo $propiedad['imagen']; ?>" class="imagen-tabla"></td>
+                <td><?php echo $propiedad['precio']; ?></td>
+                <td>
+                    <a href="#" class="boton-rojo-block">Eliminar</a>
+                    <a href="#" class="boton-amarillo-block">Actualizar</a>
+                </td>
+            </tr>
+            <?php endwhile; ?>
+            
+            <!-- <tr>
                 <td>1</td>
                 <td>Casa en la playa</td>
                 <td><img src="/imagenes/d7924930e32418f96194df82f4b302e3.jpg" class="imagen-tabla"></td>
@@ -35,11 +57,12 @@ incluirTemplate("header");
                     <a href="#" class="boton-rojo-block">Eliminar</a>
                     <a href="#" class="boton-amarillo-block">Actualizar</a>
                 </td>
-            </tr>
+            </tr> -->
         </tbody>
     </table>
 </main>
 
 <?php
+mysqli_close($db);
 incluirTemplate("footer");
 ?>
