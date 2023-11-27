@@ -19,6 +19,9 @@ incluirTemplate("header");
         if(intval($mensaje) === 1){
             $mensaje = "Anuncio creado correctamente";
             echo "<p class='alerta exito'>" . $mensaje . "</p>";
+        } else if (intval($mensaje) === 2){
+            $mensaje = "Anuncio actualizado correctamente";
+            echo "<p class='alerta exito'>" . $mensaje . "</p>";
         }
     ?>
 
@@ -43,7 +46,7 @@ incluirTemplate("header");
                 <td><?php echo $propiedad['precio']; ?></td>
                 <td>
                     <a href="#" class="boton-rojo-block">Eliminar</a>
-                    <a href="#" class="boton-amarillo-block">Actualizar</a>
+                    <a href="admin/propiedades/actualizar.php?id=<?php echo $propiedad['id']; ?>" class="boton-amarillo-block">Actualizar</a>
                 </td>
             </tr>
             <?php endwhile; ?>
