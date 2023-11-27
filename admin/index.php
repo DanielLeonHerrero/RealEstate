@@ -25,7 +25,7 @@ incluirTemplate("header");
         }
     ?>
 
-    <a href="/propiedades/crear.php" class="boton boton-verde">Nueva Propiedad</a>
+    <a href="/admin/propiedades/crear.php" class="boton boton-verde">Nueva Propiedad</a>
 
     <table class="propiedades">
         <thead>
