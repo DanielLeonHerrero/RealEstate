@@ -8,6 +8,28 @@ $resultado = mysqli_query($db, $querry);
 
 //Recuperar datos de tipo GET
 $mensaje = $_GET['resultado'] ?? null;
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $id = $_POST['id'];
+    $id = filter_var($id, FILTER_VALIDATE_INT);
+
+    if($id){
+        //Eliminar archivo de la imagen
+        $querry = "SELECT imagen FROM propiedades WHERE id = $id";
+        $resultado = mysqli_query($db, $querry);
+        $propiedad = mysqli_fetch_assoc($resultado);
+        unlink('../imagenes/' . $propiedad['imagen']);
+
+        //Eliminar propiedad de la base de datos
+        $querry = "DELETE FROM propiedades WHERE id = $id";
+        $resultado = mysqli_query($db, $querry);
+
+        if($resultado){
+            header('Location: /admin?resultado=3');
+        }
+    }
+}
+
 //Requires
 require_once '../includes/funciones.php';
 incluirTemplate("header");
@@ -21,6 +43,9 @@ incluirTemplate("header");
             echo "<p class='alerta exito'>" . $mensaje . "</p>";
         } else if (intval($mensaje) === 2){
             $mensaje = "Anuncio actualizado correctamente";
+            echo "<p class='alerta exito'>" . $mensaje . "</p>";
+        } else if (intval($mensaje) === 3){
+            $mensaje = "Anuncio eliminado correctamente";
             echo "<p class='alerta exito'>" . $mensaje . "</p>";
         }
     ?>
@@ -45,7 +70,10 @@ incluirTemplate("header");
                 <td><img src="/imagenes/<?php echo $propiedad['imagen']; ?>" class="imagen-tabla"></td>
                 <td><?php echo $propiedad['precio']; ?></td>
                 <td>
-                    <a href="#" class="boton-rojo-block">Eliminar</a>
+                    <form method="POST" class="w-100">
+                        <input type="hidden" name="id" value="<?php echo $propiedad['id']; ?>">
+                        <input type="submit" class="boton-rojo-block" value="Eliminar"/>
+                    </form>
                     <a href="/admin/propiedades/actualizar.php?id=<?php echo $propiedad['id']; ?>" class="boton-amarillo-block">Actualizar</a>
                 </td>
             </tr>
