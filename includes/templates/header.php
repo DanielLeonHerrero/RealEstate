@@ -1,3 +1,11 @@
+<?php 
+    if(!isset($_SESSION)){
+        session_start();
+    }
+        
+    $auth = $_SESSION['login'] ?? null;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,6 +34,14 @@
                         <a href="anuncios.php">Anuncios</a>
                         <a href="blog.php">Blog</a>
                         <a href="contacto.php">Contacto</a>
+                        <?php 
+                            if($auth){
+                                echo '<a href="/admin/index.php">Admin</a>';
+                                echo '<a href="/cerrar-sesion.php">Cerrar Sesión</a>';
+                            }else{
+                                echo '<a href="/login.php">Iniciar Sesión</a>';
+                            }
+                        ?>
                     </nav>
                 </div>
    
