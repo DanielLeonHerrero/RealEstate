@@ -1,4 +1,11 @@
 <?php
+//Requires
+require_once '../includes/funciones.php';
+
+$auth = estaAuthenticado();
+if(!$auth){
+    header('Location: /');
+}
 require_once '../includes/config/database.php';
 $db = conectarDB();
 
@@ -12,28 +19,26 @@ $mensaje = $_GET['resultado'] ?? null;
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $id = $_POST['id'];
     $id = filter_var($id, FILTER_VALIDATE_INT);
-
+    
     if($id){
         //Eliminar archivo de la imagen
         $querry = "SELECT imagen FROM propiedades WHERE id = $id";
         $resultado = mysqli_query($db, $querry);
         $propiedad = mysqli_fetch_assoc($resultado);
         unlink('../imagenes/' . $propiedad['imagen']);
-
+        
         //Eliminar propiedad de la base de datos
         $querry = "DELETE FROM propiedades WHERE id = $id";
         $resultado = mysqli_query($db, $querry);
-
+        
         if($resultado){
             header('Location: /admin?resultado=3');
         }
     }
 }
-
-//Requires
-require_once '../includes/funciones.php';
 incluirTemplate("header");
 ?>
+
 
 <main class="contenedor seccion">
     <h1>Administrador de Bienes Raíces</h1>

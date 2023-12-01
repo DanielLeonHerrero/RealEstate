@@ -1,4 +1,9 @@
 <?php
+require_once '../../includes/funciones.php';
+$auth = estaAuthenticado();
+if(!$auth){
+    header('Location: /');
+}
 require_once '../../includes/config/database.php';
 $db = conectarDB();
 
@@ -98,7 +103,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
 }
 
-require_once '../../includes/funciones.php';
 incluirTemplate("header");
 ?>
 

@@ -8,8 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email =  mysqli_real_escape_string($db,filter_var($_POST["email"], FILTER_VALIDATE_EMAIL));
     $password = mysqli_real_escape_string($db,$_POST["password"]);
     $passwordHash = password_hash($password, PASSWORD_BCRYPT);
-    $query = "INSERT INTO usuarios (email, password) VALUES ('$email', '$passwordHash');";
-    mysqli_query($db, $query);
+    // $query = "INSERT INTO usuarios (email, password) VALUES ('$email', '$passwordHash');";
+    // mysqli_query($db, $query);
 }
 
 if (!$email) {
@@ -20,7 +20,22 @@ if (!$password) {
 }
 
 if (empty($errores)) {
-
+    $query = "SELECT * FROM usuarios WHERE email = '$email'";
+    $resultado = mysqli_query($db, $query);
+    if ($resultado->num_rows) {
+        $usuario = mysqli_fetch_assoc($resultado);
+        $auth = password_verify($password, $usuario["password"]);
+        if ($auth) {
+            session_start();
+            $_SESSION["usuario"] = $usuario["email"];
+            $_SESSION["login"] = true;
+            header("Location: /admin");
+        } else {
+            $errores[] = "El password es incorrecto";
+        }
+    } else {
+        $errores[] = "El usuario no existe";
+    }
 }
 
 require_once 'includes/funciones.php';
